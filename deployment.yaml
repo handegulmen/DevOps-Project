@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: flask-rest-api-demo
+spec:
+  selector:
+   app: flask-rest-api-demo
+ports:
+  - protocol: "TCP"
+    port: 6000
+    targetPort: 5000
+type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-rest-api-demo
+spec:
+  selector:
+    matchLabels:
+   app: flask-rest-api-demo
+replicas: 5
+template:
+  metadata:
+  labels:
+    app: flask-rest-api-demo
+spec:
+containers:
+  - name: flask-rest-api-demo
+  image: docker.io/handee1/flask-rest-api-demo
+  imagePullPolicy: IfNotPresent
+  ports:
+    - containerPort: 5000
